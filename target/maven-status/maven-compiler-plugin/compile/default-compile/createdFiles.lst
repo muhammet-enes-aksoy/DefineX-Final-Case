@@ -1,0 +1,5 @@
+com\example\taskmanagement\enums\ProjectStatus.class
+com\example\taskmanagement\enums\TaskState.class
+com\example\taskmanagement\enums\TaskPriority.class
+com\example\taskmanagement\enums\UserRoles.class
+com\example\taskmanagement\TaskmanagementApplication.class
