@@ -21,52 +21,50 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserService {
 
-    private UserRepository userRepository;
-
-    private UserMapper userMapper;
-
-    UserService (UserRepository userRepository, UserMapper userMapper) {
-        this.userRepository = userRepository;
-        this.userMapper = userMapper;
-    }
+    private final UserRepository userRepository;
 
     public List<UserDto> getAllUsers() {
         List<User> activeUsers = userRepository.findAll()
                 .stream()
                 .filter(User::isActive)
                 .collect(Collectors.toList());
-        return userMapper.toUserDtoList(activeUsers);
+        return UserMapper.MAPPER.toUserDtoList(activeUsers);
     }
 
     public UserDto getUserById(Long id) throws UserNotFoundException {
         User user = userRepository.findById(id)
                 .filter(User::isActive)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with id: " + id));
-        return userMapper.toUserDto(user);
+        return UserMapper.MAPPER.toUserDto(user);
     }
 
-
+    @Transactional
     public UserDto createUser(UserDto userDto) {
-        User newUser = userMapper.toUser(userDto);
+        User newUser = UserMapper.MAPPER.toUser(userDto);
+        newUser.setUsername(userDto.getUsername());
+        newUser.setPassword(userDto.getPassword());
+        newUser.setEmail(userDto.getEmail());
         newUser.setActive(true);
         newUser.setCreatedAt(new Date().getTime());
         User savedUser = userRepository.save(newUser);
-        return userMapper.toUserDto(savedUser);
+        return UserMapper.MAPPER.toUserDto(savedUser);
     }
 
-    public UserDto updateUser(UserDto userDto) throws UserNotFoundException {
+    @Transactional
+    public UserDto updateUser(UserDto userDto, Long id) throws UserNotFoundException {
 
-        User existingUser = userRepository.findById(userDto.getId())
+       User existingUser = userRepository.findById(id)
                 .filter(User::isActive)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with id: " + userDto.getId()));
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with id: " + id));
 
-        existingUser.setName(userDto.getName());
+        existingUser.setUsername(userDto.getUsername());
+        existingUser.setPassword(userDto.getPassword());
         existingUser.setEmail(userDto.getEmail());
-        existingUser.setRole(userDto.getRole().name());
+        existingUser.setRole(userDto.getRole());
         existingUser.setUpdatedAt(new Date().getTime());
 
         User updatedUser = userRepository.save(existingUser);
-        return userMapper.toUserDto(updatedUser);
+        return UserMapper.MAPPER.toUserDto(updatedUser);
     }
 
     @Transactional
@@ -80,8 +78,8 @@ public class UserService {
     public List<UserDto> getUsersByRole(UserRoles role) {
         List<User> users = userRepository.findAll()
                 .stream()
-                .filter(user -> user.isActive() && user.getRole().equals(role.name())) // Aktif ve rolü eşleşen kullanıcıları getir
+                .filter(user -> user.isActive() && user.getRole().equals(role)) // Aktif ve rolü eşleşen kullanıcıları getir
                 .collect(Collectors.toList());
-        return userMapper.toUserDtoList(users);
+        return UserMapper.MAPPER.toUserDtoList(users);
     }
 }

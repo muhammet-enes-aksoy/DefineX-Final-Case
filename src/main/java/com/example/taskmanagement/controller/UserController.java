@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 public class UserController {
 
@@ -38,8 +38,7 @@ public class UserController {
     // Mevcut kullanıcıyı günceller
     @PutMapping("/{id}")
     public ResponseEntity<UserDto> updateUser(@PathVariable Long id, @RequestBody UserDto userDto) throws UserNotFoundException {
-        userDto.setId(id);
-        return ResponseEntity.ok(userService.updateUser(userDto));
+        return ResponseEntity.ok(userService.updateUser(userDto, id));
     }
 
     // Kullanıcıyı pasif hale getirir (Silme işlemi)
