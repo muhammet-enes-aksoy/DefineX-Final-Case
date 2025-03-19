@@ -17,7 +17,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/api/v1/users/**",
-                                "/api/v1/projects/**",// Kullanıcı işlemlerine erişim izni
+                                "/api/v1/projects/**",
+                                "/api/v1/tasks/**",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
                                 "/swagger-ui.html",

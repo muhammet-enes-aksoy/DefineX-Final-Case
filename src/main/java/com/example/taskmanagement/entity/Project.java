@@ -36,14 +36,18 @@ public class Project extends BaseEntity {
     @Column(name = "STATUS", nullable = false)
     private ProjectStatus status;
 
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Task> tasks = new ArrayList<>();
-
     @ManyToMany
     @JoinTable(
-            name = "project_user",
+            name = "projects_team_members",
             joinColumns = @JoinColumn(name = "project_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
     private List<User> teamMembers = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "projects_tasks",
+            joinColumns = @JoinColumn(name = "project_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "task_id", referencedColumnName = "id"))
+    private List<Task> tasks = new ArrayList<>();
 
 }

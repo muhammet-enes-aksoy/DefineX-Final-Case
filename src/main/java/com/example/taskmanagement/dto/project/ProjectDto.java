@@ -1,6 +1,7 @@
 package com.example.taskmanagement.dto.project;
 
 import com.example.taskmanagement.base.dto.BaseDto;
+import com.example.taskmanagement.entity.Task;
 import com.example.taskmanagement.entity.User;
 import com.example.taskmanagement.enums.ProjectStatus;
 import lombok.*;
@@ -22,5 +23,6 @@ public class ProjectDto implements BaseDto {
     private ProjectStatus status;
 
     private List<User> teamMembers;
+    private List<Task> tasks;
 
 }

@@ -23,7 +23,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "USERS")
-public class User extends BaseEntity implements UserDetails {
+public class User extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -42,43 +42,4 @@ public class User extends BaseEntity implements UserDetails {
     @Column(name = "ROLE", length = 20)
     private UserRoles role;
 
-    @ManyToMany(mappedBy = "teamMembers")
-    private List<Project> projects = new ArrayList<>();
-
-    @OneToMany(mappedBy = "assignee")
-    private List<Task> tasks = new ArrayList<>();
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(() -> "ROLE_" + role.name());
-    }
-    @Override
-    public String getPassword() {
-        return password;
-    }
-
-    @Override
-    public String getUsername() {
-        return username;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return UserDetails.super.isAccountNonExpired();
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return UserDetails.super.isAccountNonLocked();
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return UserDetails.super.isCredentialsNonExpired();
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return UserDetails.super.isEnabled();
-    }
 }

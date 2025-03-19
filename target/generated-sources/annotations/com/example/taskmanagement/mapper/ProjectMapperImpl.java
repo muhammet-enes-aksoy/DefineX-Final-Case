@@ -2,13 +2,14 @@ package com.example.taskmanagement.mapper;
 
 import com.example.taskmanagement.dto.project.ProjectDto;
 import com.example.taskmanagement.entity.Project;
+import com.example.taskmanagement.entity.User;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.processing.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-03-19T19:48:48+0300",
+    date = "2025-03-20T00:11:11+0300",
     comments = "version: 1.6.3, compiler: javac, environment: Java 21.0.6 (Oracle Corporation)"
 )
 public class ProjectMapperImpl implements ProjectMapper {
@@ -26,6 +27,10 @@ public class ProjectMapperImpl implements ProjectMapper {
         project.setDescription( dto.getDescription() );
         project.setDepartment( dto.getDepartment() );
         project.setStatus( dto.getStatus() );
+        List<User> list = dto.getTeamMembers();
+        if ( list != null ) {
+            project.setTeamMembers( new ArrayList<User>( list ) );
+        }
 
         return project;
     }
@@ -43,6 +48,10 @@ public class ProjectMapperImpl implements ProjectMapper {
         projectDto.description( entity.getDescription() );
         projectDto.department( entity.getDepartment() );
         projectDto.status( entity.getStatus() );
+        List<User> list = entity.getTeamMembers();
+        if ( list != null ) {
+            projectDto.teamMembers( new ArrayList<User>( list ) );
+        }
 
         return projectDto.build();
     }
