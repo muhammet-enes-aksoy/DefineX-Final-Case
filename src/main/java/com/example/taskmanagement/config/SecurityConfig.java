@@ -16,7 +16,8 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())  // CSRF'yi devre dışı bırak
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/api/v1/users/**",  // Kullanıcı işlemlerine erişim izni
+                                "/api/v1/users/**",
+                                "/api/v1/projects/**",// Kullanıcı işlemlerine erişim izni
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
                                 "/swagger-ui.html",
