@@ -1,7 +1,15 @@
 package com.example.taskmanagement.exception;
 
-public class UserNotFoundException extends RuntimeException {
-    public UserNotFoundException() {
-        super("UserNotFoundException");
-    }
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+@Getter
+@Setter
+@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+@RequiredArgsConstructor
+public class UserNotFoundException extends NullPointerException {
+    private final String errorMessage;
 }

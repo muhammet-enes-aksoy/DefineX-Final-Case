@@ -1,6 +1,8 @@
 package com.example.taskmanagement.controller;
 
-import com.example.taskmanagement.dto.UserDto;
+import com.example.taskmanagement.base.RestResponse;
+import com.example.taskmanagement.dto.user.UserCreateDto;
+import com.example.taskmanagement.dto.user.UserDto;
 import com.example.taskmanagement.enums.UserRoles;
 import com.example.taskmanagement.exception.UserNotFoundException;
 import com.example.taskmanagement.service.UserService;
@@ -17,40 +19,34 @@ public class UserController {
 
     private final UserService userService;
 
-    // Tüm aktif kullanıcıları getirir
     @GetMapping
-    public ResponseEntity<List<UserDto>> getAllUsers() {
-        return ResponseEntity.ok(userService.getAllUsers());
+    public ResponseEntity<RestResponse<List<UserDto>>> getAllUsers() {
+        return ResponseEntity.ok(RestResponse.of(userService.getAllUsers()));
     }
 
-    // Belirtilen ID'ye sahip aktif kullanıcıyı getirir
     @GetMapping("/{id}")
-    public ResponseEntity<UserDto> getUserById(@PathVariable Long id) throws UserNotFoundException {
-        return ResponseEntity.ok(userService.getUserById(id));
+    public ResponseEntity<RestResponse<UserDto>> getUserById(@PathVariable Long id) throws UserNotFoundException {
+        return ResponseEntity.ok(RestResponse.of(userService.getUserById(id)));
     }
 
-    // Yeni kullanıcı oluşturur
     @PostMapping
-    public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
-        return ResponseEntity.ok(userService.createUser(userDto));
+    public ResponseEntity<RestResponse<UserDto>> createUser(@RequestBody UserCreateDto userCreateDto) {
+        return ResponseEntity.ok(RestResponse.of(userService.createUser(userCreateDto)));
     }
 
-    // Mevcut kullanıcıyı günceller
     @PutMapping("/{id}")
-    public ResponseEntity<UserDto> updateUser(@PathVariable Long id, @RequestBody UserDto userDto) throws UserNotFoundException {
-        return ResponseEntity.ok(userService.updateUser(userDto, id));
+    public ResponseEntity<RestResponse<UserDto>> updateUser(@PathVariable Long id, @RequestBody UserDto userDto) throws UserNotFoundException {
+        return ResponseEntity.ok(RestResponse.of(userService.updateUser(userDto, id)));
     }
 
-    // Kullanıcıyı pasif hale getirir (Silme işlemi)
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) throws UserNotFoundException {
+    public ResponseEntity<RestResponse<String>> deleteUser(@PathVariable Long id) throws UserNotFoundException {
         userService.deleteUser(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(RestResponse.of("User deleted!"));
     }
 
-    // Belirli bir role sahip kullanıcıları getirir
     @GetMapping("/role/{role}")
-    public ResponseEntity<List<UserDto>> getUsersByRole(@PathVariable UserRoles role) {
-        return ResponseEntity.ok(userService.getUsersByRole(role));
+    public ResponseEntity<RestResponse<List<UserDto>>> getUsersByRole(@PathVariable UserRoles role) {
+        return ResponseEntity.ok(RestResponse.of(userService.getUsersByRole(role)));
     }
 }
