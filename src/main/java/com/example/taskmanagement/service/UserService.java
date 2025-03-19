@@ -1,85 +1,83 @@
 package com.example.taskmanagement.service;
 
-import com.example.taskmanagement.dto.UserDto;
+import com.example.taskmanagement.dto.user.UserCreateDto;
+import com.example.taskmanagement.dto.user.UserDto;
 import com.example.taskmanagement.entity.User;
 import com.example.taskmanagement.enums.UserRoles;
 import com.example.taskmanagement.exception.UserNotFoundException;
+import com.example.taskmanagement.base.service.BaseEntityService;
 import com.example.taskmanagement.mapper.UserMapper;
 import com.example.taskmanagement.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
-
 @Service
-@RequiredArgsConstructor
-public class UserService {
+public class UserService extends BaseEntityService<User, UserRepository> {
 
-    private final UserRepository userRepository;
+    public UserService(UserRepository userRepository) {
+        super(userRepository);
+    }
 
     public List<UserDto> getAllUsers() {
-        List<User> activeUsers = userRepository.findAll()
-                .stream()
-                .filter(User::isActive)
-                .collect(Collectors.toList());
-        return UserMapper.MAPPER.toUserDtoList(activeUsers);
+
+        return UserMapper.MAPPER.converToDtoList(super.findAll());
     }
 
     public UserDto getUserById(Long id) throws UserNotFoundException {
-        User user = userRepository.findById(id)
-                .filter(User::isActive)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with id: " + id));
-        return UserMapper.MAPPER.toUserDto(user);
+        return UserMapper.MAPPER.converToDto(super.findByIdWithControl(id));
     }
 
     @Transactional
-    public UserDto createUser(UserDto userDto) {
-        User newUser = UserMapper.MAPPER.toUser(userDto);
-        newUser.setUsername(userDto.getUsername());
-        newUser.setPassword(userDto.getPassword());
-        newUser.setEmail(userDto.getEmail());
-        newUser.setActive(true);
-        newUser.setCreatedAt(new Date().getTime());
-        User savedUser = userRepository.save(newUser);
-        return UserMapper.MAPPER.toUserDto(savedUser);
+    public UserDto createUser(UserCreateDto userCreateDto) {
+        User newUser = new User() ;
+        newUser.setUsername(userCreateDto.getUsername());
+        newUser.setPassword(userCreateDto.getPassword());
+        newUser.setEmail(userCreateDto.getEmail());
+        newUser.setRole(userCreateDto.getRole());
+        return UserMapper.MAPPER.converToDto(super.save(newUser));
     }
 
     @Transactional
     public UserDto updateUser(UserDto userDto, Long id) throws UserNotFoundException {
-
-       User existingUser = userRepository.findById(id)
-                .filter(User::isActive)
+       User existingUser = super.findById(id)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with id: " + id));
-
-        existingUser.setUsername(userDto.getUsername());
-        existingUser.setPassword(userDto.getPassword());
-        existingUser.setEmail(userDto.getEmail());
-        existingUser.setRole(userDto.getRole());
-        existingUser.setUpdatedAt(new Date().getTime());
-
-        User updatedUser = userRepository.save(existingUser);
-        return UserMapper.MAPPER.toUserDto(updatedUser);
+       updateNonNullFields(existingUser, userDto);
+       return UserMapper.MAPPER.converToDto(super.save(existingUser));
     }
 
     @Transactional
     public void deleteUser(Long id) throws UserNotFoundException {
-        User user = userRepository.findById(id)
-                .filter(User::isActive)
+        User user = super.findById(id)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with id: " + id));
-       user.setActive(false);
+        super.delete(user);
+
     }
 
     public List<UserDto> getUsersByRole(UserRoles role) {
-        List<User> users = userRepository.findAll()
+        List<User> users = super.findAll()
                 .stream()
-                .filter(user -> user.isActive() && user.getRole().equals(role)) // Aktif ve rolü eşleşen kullanıcıları getir
+                .filter(user -> user.getRole().equals(role))
                 .collect(Collectors.toList());
-        return UserMapper.MAPPER.toUserDtoList(users);
+        return UserMapper.MAPPER.converToDtoList(users);
     }
+
+    private void updateNonNullFields(User existingUser, UserDto userDto) {
+        if (userDto.getUsername() != null && !userDto.getUsername().isBlank()) {
+            existingUser.setUsername(userDto.getUsername());
+        }
+        if (userDto.getPassword() != null && !userDto.getPassword().isBlank()) {
+            existingUser.setPassword(userDto.getPassword());
+        }
+        if (userDto.getEmail() != null && !userDto.getEmail().isBlank()) {
+            existingUser.setEmail(userDto.getEmail());
+        }
+        if (userDto.getRole() != null) {
+            existingUser.setRole(userDto.getRole());
+        }
+    }
+
 }
