@@ -1,5 +1,6 @@
 package com.example.taskmanagement.entity;
 
+import com.example.taskmanagement.base.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,11 +12,13 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Comment {
+@Table(name = "COMMENTS")
+public class Comment extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "TEXT", nullable = false)
     private String text;
 
     @ManyToOne

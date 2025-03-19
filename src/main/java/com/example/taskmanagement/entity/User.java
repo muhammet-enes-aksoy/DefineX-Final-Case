@@ -1,6 +1,7 @@
 package com.example.taskmanagement.entity;
 
 import com.example.taskmanagement.enums.UserRoles;
+import com.example.taskmanagement.base.entity.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -22,29 +23,24 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "USERS")
-public class User implements UserDetails {
+public class User extends BaseEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
     @Column(name = "USERNAME", length = 100 , nullable = false)
     private String username;
+
+    @Column(name = "PASSWORD", length = 100,nullable = false)
+    private String password;
 
     @Email
     @Column(name = "EMAIL")
     private String email;
 
-    @NotNull
-    @Column(name = "PASSWORD", length = 100,nullable = false)
-    private String password;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "ROLE", length = 20)
     private UserRoles role;
-
-    @Column(name = "IS_ACTIVE")
-    private boolean isActive;
 
     @ManyToMany(mappedBy = "teamMembers")
     private List<Project> projects = new ArrayList<>();
@@ -52,26 +48,18 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "assignee")
     private List<Task> tasks = new ArrayList<>();
 
-    @Column(name = "CREATED_AT", nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Long createdAt;
-
-    @Column(name = "UPDATED_AT")
-    @Temporal(TemporalType.TIMESTAMP)
-    private long updatedAt;
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(() -> "ROLE_" + role.name());
     }
     @Override
     public String getPassword() {
-        return "";
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return "";
+        return username;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.example.taskmanagement.entity;
 
+import com.example.taskmanagement.base.entity.BaseEntity;
 import com.example.taskmanagement.enums.ProjectStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -15,21 +16,34 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Project {
+@Table(name = "PROJECTS")
+public class Project extends BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "TITLE", nullable = false)
     private String title;
+
+    @Column(name = "DESCRIPTION")
     private String description;
+
+    @Column(name = "DEPARTMENT", nullable = false)
     private String department;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "STATUS", nullable = false)
     private ProjectStatus status;
 
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Task> tasks = new ArrayList<>();
 
     @ManyToMany
+    @JoinTable(
+            name = "project_user",
+            joinColumns = @JoinColumn(name = "project_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
     private List<User> teamMembers = new ArrayList<>();
+
 }
