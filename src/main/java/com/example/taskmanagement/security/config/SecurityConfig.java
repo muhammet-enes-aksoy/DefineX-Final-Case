@@ -31,6 +31,7 @@ public class SecurityConfig {
                                 .requestMatchers(
                                         "/api/v1/auth/**",
                                         "/api/v1/projects/**",
+                                        "/api/v1/users/**",
                                         "/api/v1/tasks/**",
                                         "/api/v1/comments/**",
                                         "/api/v1/attachments/**",
@@ -45,7 +46,7 @@ public class SecurityConfig {
                                         "/swagger-ui.html")
 
                                 .permitAll()
-                                .requestMatchers("/api/v1/users/**").hasAnyRole("PROJECT_MANAGER")
+                                //.requestMatchers("/api/v1/users/**").hasAnyRole("PROJECT_MANAGER")
                                 .anyRequest().authenticated()
                 )
 

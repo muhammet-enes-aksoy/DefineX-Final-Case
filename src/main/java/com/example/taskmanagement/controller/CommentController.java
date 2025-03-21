@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 public class CommentController {
     private final CommentService commentService;
     
-    @PostMapping("/{taskId}/{userId}")
+    @PostMapping("task/{taskId}/user/{userId}")
     public ResponseEntity<RestResponse<CommentDto>> createComment(@PathVariable Long taskId,
                                                                   @PathVariable Long userId,
                                                                   @RequestBody CommentCreateDto commentCreateDto) {
@@ -23,13 +23,13 @@ public class CommentController {
     }
 
     @PutMapping("/{commentId}")
-    public ResponseEntity<RestResponse<CommentDto>> updateComment(@PathVariable Long CommentId,
+    public ResponseEntity<RestResponse<CommentDto>> updateComment(@PathVariable Long commentId,
                                                                   @RequestBody CommentUpdateDto commentUpdateDto) {
-        return ResponseEntity.ok(RestResponse.of(commentService.updateComment(CommentId, commentUpdateDto)));
+        return ResponseEntity.ok(RestResponse.of(commentService.updateComment(commentId, commentUpdateDto)));
     }
     @DeleteMapping("/{commentId}")
-    public ResponseEntity<RestResponse<String>> deleteComment(@PathVariable Long CommentId) {
-        commentService.deleteComment(CommentId);
+    public ResponseEntity<RestResponse<String>> deleteComment(@PathVariable Long commentId) {
+        commentService.deleteComment(commentId);
         return ResponseEntity.ok(RestResponse.of("Comment deleted!"));
     }
 }

@@ -71,7 +71,9 @@ public abstract class BaseEntityService<E extends BaseEntity, R extends JpaRepos
     }
 
     public E findByIdWithControl(Long id) {
-        return findById(id).orElseThrow(() -> new RuntimeException("Entity not found or inactive"));
+        return findById(id)
+                .filter(entity -> entity.getBaseAdditionalFields().isActive())
+                .orElseThrow(() -> new RuntimeException("Entity not found or inactive"));
     }
 
     public boolean isExist(Long id) {

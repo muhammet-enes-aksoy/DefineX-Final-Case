@@ -14,7 +14,7 @@ import javax.annotation.processing.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-03-21T20:35:50+0300",
+    date = "2025-03-21T21:05:31+0300",
     comments = "version: 1.6.3, compiler: javac, environment: Java 21.0.6 (Oracle Corporation)"
 )
 public class UserMapperImpl implements UserMapper {

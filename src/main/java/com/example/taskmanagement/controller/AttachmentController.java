@@ -1,10 +1,8 @@
 package com.example.taskmanagement.controller;
 
 import com.example.taskmanagement.base.RestResponse;
-import com.example.taskmanagement.dto.attachment.AttachmentCreateDto;
 import com.example.taskmanagement.dto.attachment.AttachmentDto;
 import com.example.taskmanagement.dto.attachment.AttachmentUpdateDto;
-import com.example.taskmanagement.entity.Attachment;
 import com.example.taskmanagement.service.AttachmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;

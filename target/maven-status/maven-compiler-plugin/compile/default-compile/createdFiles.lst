@@ -42,6 +42,7 @@ com\example\taskmanagement\security\response\AuthenticationResponse.class
 com\example\taskmanagement\service\UserService.class
 com\example\taskmanagement\dto\task\TaskDto$TaskDtoBuilder.class
 com\example\taskmanagement\security\config\JwtAuthenticationFilter.class
+com\example\taskmanagement\base\GlobalExceptionHandler.class
 com\example\taskmanagement\security\request\RegisterRequest.class
 com\example\taskmanagement\exception\UserNotFoundException.class
 com\example\taskmanagement\exception\CommentNotFoundException.class
@@ -68,6 +69,8 @@ com\example\taskmanagement\controller\CommentController.class
 com\example\taskmanagement\controller\UserController.class
 com\example\taskmanagement\enums\UserRoles.class
 com\example\taskmanagement\dto\project\ProjectCreateDto.class
+com\example\taskmanagement\dto\user\TeamMemberDto$TeamMemberDtoBuilder.class
+com\example\taskmanagement\dto\user\TeamMemberDto.class
 com\example\taskmanagement\service\CommentService.class
 com\example\taskmanagement\TaskmanagementApplication.class
 com\example\taskmanagement\dto\comment\CommentCreateDto.class

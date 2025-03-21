@@ -1,9 +1,9 @@
-C:\Users\Muham\OneDrive\Belgeler\GitHub\DefineX-Final-Case\src\main\java\com\example\taskmanagement\base\CustomizedResponseEntityExceptionHandler.java
 C:\Users\Muham\OneDrive\Belgeler\GitHub\DefineX-Final-Case\src\main\java\com\example\taskmanagement\base\dto\BaseDto.java
 C:\Users\Muham\OneDrive\Belgeler\GitHub\DefineX-Final-Case\src\main\java\com\example\taskmanagement\base\entity\BaseAdditionalFields.java
 C:\Users\Muham\OneDrive\Belgeler\GitHub\DefineX-Final-Case\src\main\java\com\example\taskmanagement\base\entity\BaseEntity.java
 C:\Users\Muham\OneDrive\Belgeler\GitHub\DefineX-Final-Case\src\main\java\com\example\taskmanagement\base\entity\BaseEntityModel.java
 C:\Users\Muham\OneDrive\Belgeler\GitHub\DefineX-Final-Case\src\main\java\com\example\taskmanagement\base\GenericErrorMessage.java
+C:\Users\Muham\OneDrive\Belgeler\GitHub\DefineX-Final-Case\src\main\java\com\example\taskmanagement\base\GlobalExceptionHandler.java
 C:\Users\Muham\OneDrive\Belgeler\GitHub\DefineX-Final-Case\src\main\java\com\example\taskmanagement\base\mapper\BaseMapper.java
 C:\Users\Muham\OneDrive\Belgeler\GitHub\DefineX-Final-Case\src\main\java\com\example\taskmanagement\base\RestResponse.java
 C:\Users\Muham\OneDrive\Belgeler\GitHub\DefineX-Final-Case\src\main\java\com\example\taskmanagement\base\service\BaseEntityService.java
@@ -24,6 +24,7 @@ C:\Users\Muham\OneDrive\Belgeler\GitHub\DefineX-Final-Case\src\main\java\com\exa
 C:\Users\Muham\OneDrive\Belgeler\GitHub\DefineX-Final-Case\src\main\java\com\example\taskmanagement\dto\task\TaskCreateDto.java
 C:\Users\Muham\OneDrive\Belgeler\GitHub\DefineX-Final-Case\src\main\java\com\example\taskmanagement\dto\task\TaskDto.java
 C:\Users\Muham\OneDrive\Belgeler\GitHub\DefineX-Final-Case\src\main\java\com\example\taskmanagement\dto\task\TaskResponse.java
+C:\Users\Muham\OneDrive\Belgeler\GitHub\DefineX-Final-Case\src\main\java\com\example\taskmanagement\dto\user\TeamMemberDto.java
 C:\Users\Muham\OneDrive\Belgeler\GitHub\DefineX-Final-Case\src\main\java\com\example\taskmanagement\dto\user\UserCreateDto.java
 C:\Users\Muham\OneDrive\Belgeler\GitHub\DefineX-Final-Case\src\main\java\com\example\taskmanagement\dto\user\UserDto.java
 C:\Users\Muham\OneDrive\Belgeler\GitHub\DefineX-Final-Case\src\main\java\com\example\taskmanagement\entity\Attachment.java

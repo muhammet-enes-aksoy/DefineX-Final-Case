@@ -1,7 +1,6 @@
 package com.example.taskmanagement.controller;
 
 import com.example.taskmanagement.base.RestResponse;
-import com.example.taskmanagement.dto.user.UserCreateDto;
 import com.example.taskmanagement.dto.user.UserDto;
 import com.example.taskmanagement.enums.UserRoles;
 import com.example.taskmanagement.exception.UserNotFoundException;
@@ -21,32 +20,38 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
+    @PreAuthorize("hasRole('TEAM_LEADER') or hasRole('PROJECT_MANAGER')")
     public ResponseEntity<RestResponse<List<UserDto>>> getAllUsers() {
         return ResponseEntity.ok(RestResponse.of(userService.getAllUsers()));
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('TEAM_LEADER') or hasRole('PROJECT_MANAGER')")
     public ResponseEntity<RestResponse<UserDto>> getUserById(@PathVariable Long id) throws UserNotFoundException {
         return ResponseEntity.ok(RestResponse.of(userService.getUserById(id)));
     }
-    @PreAuthorize("hasRole('TEAM_MEMBERS')")
+
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('TEAM_MEMBERS') or hasRole('TEAM_LEADER') or hasRole('PROJECT_MANAGER')")
     public ResponseEntity<RestResponse<UserDto>> updateUser(@PathVariable Long id, @RequestBody UserDto userDto) throws UserNotFoundException {
         return ResponseEntity.ok(RestResponse.of(userService.updateUser(userDto, id)));
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('TEAM_LEADER') or hasRole('PROJECT_MANAGER')")
     public ResponseEntity<RestResponse<String>> deleteUser(@PathVariable Long id) throws UserNotFoundException {
         userService.deleteUser(id);
         return ResponseEntity.ok(RestResponse.of("User deleted!"));
     }
 
     @GetMapping("/role/{role}")
+    @PreAuthorize("hasRole('TEAM_LEADER') or hasRole('PROJECT_MANAGER')")
     public ResponseEntity<RestResponse<List<UserDto>>> getUsersByRole(@RequestParam UserRoles role) {
         return ResponseEntity.ok(RestResponse.of(userService.getUsersByRole(role)));
     }
-    @PreAuthorize("hasRole('PROJECT_MANAGER')")
+
     @PutMapping("/update-role/{userId}")
+    @PreAuthorize("hasRole('PROJECT_MANAGER')")
     public ResponseEntity<RestResponse<UserDto>> updateUserRole(@PathVariable Long userId, @RequestParam UserRoles newRole) {
         return ResponseEntity.ok(RestResponse.of(userService.updateUserRole(userId, newRole)));
     }
