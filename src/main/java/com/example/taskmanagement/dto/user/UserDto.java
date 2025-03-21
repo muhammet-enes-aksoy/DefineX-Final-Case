@@ -13,10 +13,10 @@ public class UserDto implements BaseDto {
     @Schema(description = "Kullanıcı adı", example = "john_doe")
     private String username;
 
-    @Schema(description = "Şifre", example = "password123", required = false) // required=false olmalı!
+    @Schema(description = "Şifre", example = "password123", required = false)
     private String password;
 
-    @Schema(description = "E-posta adresi", example = "mail@example.com")
+    @Schema(description = "E-posta adresi", example = "mail@definex.com")
     private String email;
 
     @Schema(description = "Kullanıcı rolü", example = "PROJECT_MANAGER")

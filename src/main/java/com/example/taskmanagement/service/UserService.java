@@ -1,6 +1,5 @@
 package com.example.taskmanagement.service;
 
-import com.example.taskmanagement.dto.user.UserCreateDto;
 import com.example.taskmanagement.dto.user.UserDto;
 import com.example.taskmanagement.entity.User;
 import com.example.taskmanagement.enums.UserRoles;
@@ -16,10 +15,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+
 public class UserService extends BaseEntityService<User, UserRepository> {
 
-    public UserService(UserRepository userRepository) {
+    private final UserRepository userRepository;
+    public UserService(UserRepository userRepository, UserRepository userRepository1) {
         super(userRepository);
+        this.userRepository = userRepository1;
     }
 
     public List<UserDto> getAllUsers() {
@@ -30,15 +32,8 @@ public class UserService extends BaseEntityService<User, UserRepository> {
     public UserDto getUserById(Long id) throws UserNotFoundException {
         return UserMapper.MAPPER.converToDto(super.findByIdWithControl(id));
     }
-
-    @Transactional
-    public UserDto createUser(UserCreateDto userCreateDto) {
-        User newUser = new User() ;
-        newUser.setUsername(userCreateDto.getUsername());
-        newUser.setPassword(userCreateDto.getPassword());
-        newUser.setEmail(userCreateDto.getEmail());
-        newUser.setRole(userCreateDto.getRole());
-        return UserMapper.MAPPER.converToDto(super.save(newUser));
+    public UserDto findUserByUsername(String username) throws UserNotFoundException {
+        return UserMapper.MAPPER.converToDto(userRepository.findByUsername(username).orElseThrow());
     }
 
     @Transactional
@@ -54,7 +49,6 @@ public class UserService extends BaseEntityService<User, UserRepository> {
         User user = super.findById(id)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with id: " + id));
         super.delete(user);
-
     }
 
     public List<UserDto> getUsersByRole(UserRoles role) {
@@ -63,6 +57,15 @@ public class UserService extends BaseEntityService<User, UserRepository> {
                 .filter(user -> user.getRole().equals(role))
                 .collect(Collectors.toList());
         return UserMapper.MAPPER.converToDtoList(users);
+    }
+
+    public UserDto updateUserRole(Long id, UserRoles newRole) throws UserNotFoundException {
+        User user = super.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        user.setRole(newRole);
+        super.save(user);
+        return UserMapper.MAPPER.converToDto(user);
     }
 
     private void updateNonNullFields(User existingUser, UserDto userDto) {

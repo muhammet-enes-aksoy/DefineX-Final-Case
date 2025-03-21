@@ -8,6 +8,7 @@ import com.example.taskmanagement.enums.ProjectStatus;
 import com.example.taskmanagement.service.ProjectService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class ProjectController {
     private final ProjectService projectService;
 
     @GetMapping
+    @PreAuthorize("hasRole('PROJECT_MANAGER') or hasRole('TEAM_LEADER')")
     public ResponseEntity<RestResponse<List<ProjectDto>>> getAllProjects() {
         return ResponseEntity.ok(RestResponse.of(projectService.getAllProjects()));
     }

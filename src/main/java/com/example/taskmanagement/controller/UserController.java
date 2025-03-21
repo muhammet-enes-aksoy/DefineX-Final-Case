@@ -8,6 +8,7 @@ import com.example.taskmanagement.exception.UserNotFoundException;
 import com.example.taskmanagement.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,11 +30,6 @@ public class UserController {
         return ResponseEntity.ok(RestResponse.of(userService.getUserById(id)));
     }
 
-    @PostMapping
-    public ResponseEntity<RestResponse<UserDto>> createUser(@RequestBody UserCreateDto userCreateDto) {
-        return ResponseEntity.ok(RestResponse.of(userService.createUser(userCreateDto)));
-    }
-
     @PutMapping("/{id}")
     public ResponseEntity<RestResponse<UserDto>> updateUser(@PathVariable Long id, @RequestBody UserDto userDto) throws UserNotFoundException {
         return ResponseEntity.ok(RestResponse.of(userService.updateUser(userDto, id)));
@@ -46,7 +42,12 @@ public class UserController {
     }
 
     @GetMapping("/role/{role}")
-    public ResponseEntity<RestResponse<List<UserDto>>> getUsersByRole(@PathVariable UserRoles role) {
+    public ResponseEntity<RestResponse<List<UserDto>>> getUsersByRole(@RequestParam UserRoles role) {
         return ResponseEntity.ok(RestResponse.of(userService.getUsersByRole(role)));
+    }
+    @PreAuthorize("hasRole('PROJECT_MANAGER')")
+    @PutMapping("/update-role/{userId}")
+    public ResponseEntity<RestResponse<UserDto>> updateUserRole(@PathVariable Long userId, @RequestParam UserRoles newRole) {
+        return ResponseEntity.ok(RestResponse.of(userService.updateUserRole(userId, newRole)));
     }
 }
