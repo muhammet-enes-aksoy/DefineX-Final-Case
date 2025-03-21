@@ -32,6 +32,7 @@ public class SecurityConfig {
                                         "/api/v1/auth/**",
                                         "/api/v1/projects/**",
                                         "/api/v1/tasks/**",
+                                        "/api/v1/comments/**",
                                         "/auth/**",
                                         "/v3/api-docs/**",
                                         "/swagger-resources",

@@ -12,7 +12,6 @@ import com.example.taskmanagement.exception.UserNotFoundException;
 import com.example.taskmanagement.mapper.ProjectMapper;
 import com.example.taskmanagement.mapper.UserMapper;
 import com.example.taskmanagement.repository.ProjectRepository;
-import com.example.taskmanagement.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,11 +21,11 @@ import java.util.stream.Collectors;
 @Service
 public class ProjectService extends BaseEntityService<Project, ProjectRepository> {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
-    public ProjectService(ProjectRepository projectRepository, UserRepository userRepository) {
+    public ProjectService(ProjectRepository projectRepository, UserService userService) {
         super(projectRepository);
-        this.userRepository = userRepository;
+        this.userService = userService;
     }
 
     public List<ProjectDto> getAllProjects() {
@@ -63,8 +62,8 @@ public class ProjectService extends BaseEntityService<Project, ProjectRepository
     // Proje üzerinde takım üyesi ekleme
     public ProjectDto addTeamMember(Long projectId, Long userId) {
         Project project = super.findById(projectId)
-                .orElseThrow(() -> new ProjectNotFoundException(""));
-        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ProjectNotFoundException("Project not found!"));
+        User user = userService.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found!"));
 
         boolean isUserAlreadyInTeam = project.getTeamMembers().stream()
@@ -82,7 +81,7 @@ public class ProjectService extends BaseEntityService<Project, ProjectRepository
     @Transactional
     public void deleteProject(Long projectId) {
         Project project = super.findById(projectId)
-                .orElseThrow(() -> new ProjectNotFoundException("projectId"));
+                .orElseThrow(() -> new ProjectNotFoundException("Project not found!"));
         super.delete(project);
     }
 
@@ -96,7 +95,7 @@ public class ProjectService extends BaseEntityService<Project, ProjectRepository
 
     public List<UserDto> getProjectUsers(Long projectId) {
         Project project = super.findById(projectId)
-                .orElseThrow(() -> new ProjectNotFoundException("projectId"));
+                .orElseThrow(() -> new ProjectNotFoundException("Project not found!"));
         List<User> users = project.getTeamMembers();
         return UserMapper.MAPPER.converToDtoList(users);
     }
