@@ -68,6 +68,10 @@ public class TaskController {
     public ResponseEntity<TaskResponse> updateTask(@PathVariable Long id, @RequestBody TaskDto taskDto) {
         return ResponseEntity.ok(TaskMapper.MAPPER.convertToResponse(taskService.updateTask(id, taskDto)));
     }
+    @PutMapping("/taskState/{taskId}")
+    public ResponseEntity<TaskResponse> updateTaskState(@PathVariable Long taskId, @RequestParam TaskState taskState) {
+        return ResponseEntity.ok(TaskMapper.MAPPER.convertToResponse(taskService.updateTaskStates(taskId, taskState)));
+    }
 
     @GetMapping("/{taskId}/comments")
     public ResponseEntity<RestResponse<List<CommentDto>>> getCommentsByTaskId(@PathVariable Long taskId) {

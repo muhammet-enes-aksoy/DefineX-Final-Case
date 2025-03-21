@@ -94,6 +94,15 @@ public class TaskService extends BaseEntityService<Task, TaskRepository> {
         super.delete(task);
     }
 
+    @Transactional
+    public TaskDto updateTaskStates(Long id, TaskState taskState) throws TaskNotFoundException {
+        Task task = super.findByIdWithControl(id);
+
+        if (task.getState() != null) updateTaskState(task, task.getState(), task.getReason());
+
+        return TaskMapper.MAPPER.converToDto(super.save(task));
+    }
+
     private void updateTaskState(Task task, TaskState newState, String reason) {
         if (task.getState() == TaskState.COMPLETED) {
             throw new InvalidTaskStateException("Completed tasks cannot change state.");
@@ -107,6 +116,7 @@ public class TaskService extends BaseEntityService<Task, TaskRepository> {
         if (newState == TaskState.BLOCKED || newState == TaskState.CANCELLED) {
             task.setReason(reason);
         }
+        super.save(task);
     }
     @Transactional
     public TaskDto assignTaskToUser(Long taskId, Long userId) throws TaskNotFoundException, UserNotFoundException {
