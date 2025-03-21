@@ -1,9 +1,13 @@
 package com.example.taskmanagement.service;
 
+import com.example.taskmanagement.dto.attachment.AttachmentDto;
+import com.example.taskmanagement.dto.comment.CommentDto;
 import com.example.taskmanagement.dto.project.ProjectDto;
 import com.example.taskmanagement.dto.task.TaskCreateDto;
 import com.example.taskmanagement.dto.task.TaskDto;
+import com.example.taskmanagement.dto.user.UserDto;
 import com.example.taskmanagement.entity.*;
+import com.example.taskmanagement.enums.TaskPriority;
 import com.example.taskmanagement.enums.TaskState;
 import com.example.taskmanagement.enums.UserRoles;
 import com.example.taskmanagement.exception.InvalidTaskStateException;
@@ -12,24 +16,24 @@ import com.example.taskmanagement.exception.TaskNotFoundException;
 import com.example.taskmanagement.exception.UserNotFoundException;
 import com.example.taskmanagement.mapper.ProjectMapper;
 import com.example.taskmanagement.mapper.TaskMapper;
-import com.example.taskmanagement.repository.ProjectRepository;
+import com.example.taskmanagement.mapper.UserMapper;
 import com.example.taskmanagement.repository.TaskRepository;
 import com.example.taskmanagement.base.service.BaseEntityService;
-import com.example.taskmanagement.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TaskService extends BaseEntityService<Task, TaskRepository> {
 
-    private final UserRepository userRepository;
-    private final ProjectRepository projectRepository;
+    private final UserService userService;
+    private final ProjectService projectService;
 
-    public TaskService(TaskRepository taskRepository, UserRepository userRepository, ProjectRepository projectRepository) {
+    public TaskService(TaskRepository taskRepository, UserService userService, ProjectService projectService) {
         super(taskRepository);
-        this.userRepository = userRepository;
-        this.projectRepository = projectRepository;
+        this.userService = userService;
+        this.projectService = projectService;
     }
 
     public List<TaskDto> getAllTasks() {
@@ -39,21 +43,37 @@ public class TaskService extends BaseEntityService<Task, TaskRepository> {
     public TaskDto getTaskById(Long id) throws TaskNotFoundException {
         return TaskMapper.MAPPER.converToDto(super.findByIdWithControl(id));
     }
+    public List<TaskDto> getTaskByState(TaskState taskState) throws TaskNotFoundException {
+        List<Task> tasks = super.findAll()
+                .stream()
+                .filter(task -> task.getState().equals(taskState))
+                .collect(Collectors.toList());
+        return TaskMapper.MAPPER.converToDtoList(tasks);
+    }
+    public List<TaskDto> getTaskByPriority(TaskPriority taskPriority) throws TaskNotFoundException {
+        List<Task> tasks = super.findAll()
+                .stream()
+                .filter(task -> task.getPriority().equals(taskPriority))
+                .collect(Collectors.toList());
+        return TaskMapper.MAPPER.converToDtoList(tasks);
+    }
 
     @Transactional
     public TaskDto createTask(Long projectId, TaskCreateDto taskCreateDto) {
-        Project project = projectRepository.findById(projectId).orElseThrow(() -> new ProjectNotFoundException("Project not found!"));
+        Project project = projectService.findById(projectId).orElseThrow(() -> new ProjectNotFoundException("Project not found!"));
 
         Task task = new Task();
         task.setPriority(taskCreateDto.getPriority());
         task.setTitle(taskCreateDto.getTitle());
         task.setDescription(taskCreateDto.getDescription());
         task.setState(taskCreateDto.getState());
+        task.setProject(project);
+        super.save(task);
         project.getTasks().add(task);
-        projectRepository.save(project);
-        ProjectDto projectDto =  ProjectMapper.MAPPER.converToDto(project);
-        projectDto.setTasks(project.getTasks());
-        return TaskMapper.MAPPER.converToDto(super.save(task));
+        /*ProjectDto projectDto =  ProjectMapper.MAPPER.converToDto(project);
+        projectDto.setTasks(project.getTasks());*/
+        projectService.save(project);
+        return TaskMapper.MAPPER.converToDto(task);
     }
 
     @Transactional
@@ -91,23 +111,30 @@ public class TaskService extends BaseEntityService<Task, TaskRepository> {
     @Transactional
     public TaskDto assignTaskToUser(Long taskId, Long userId) throws TaskNotFoundException, UserNotFoundException {
         Task task = super.findById(taskId).orElseThrow(() -> new TaskNotFoundException("Task not found"));
-        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("User not found"));
+        User user = userService.findById(userId).orElseThrow(() -> new UserNotFoundException("User not found"));
 
         if (user.getRole() != UserRoles.TEAM_MEMBER) {
             throw new IllegalArgumentException("Only TEAM_MEMBER role can be assigned to a task");
         }
 
         task.setAssignee(user);
-        return TaskMapper.MAPPER.converToDto(super.save(task));
+        super.save(task);
+        user.getTasks().add(task);
+        /*UserDto userDto = UserMapper.MAPPER.converToDto(user);
+        userDto.setTasks(user.getTasks());*/
+        userService.save(user);
+        return TaskMapper.MAPPER.converToDto(task);
     }
 
-    public List<Comment> getCommentsByTaskId(Long taskId) throws TaskNotFoundException {
+    public List<CommentDto> getCommentsByTaskId(Long taskId) throws TaskNotFoundException {
         Task task = super.findById(taskId).orElseThrow(() -> new TaskNotFoundException("Task not found"));
-        return task.getComments();
+        TaskDto taskDto = TaskMapper.MAPPER.converToDto(task);
+        return taskDto.getComments();
     }
 
-    public List<Attachment> getAttachmentsByTaskId(Long taskId) throws TaskNotFoundException {
+    public List<AttachmentDto> getAttachmentsByTaskId(Long taskId) throws TaskNotFoundException {
         Task task = super.findById(taskId).orElseThrow(() -> new TaskNotFoundException("Task not found"));
-        return task.getAttachments();
+        TaskDto taskDto = TaskMapper.MAPPER.converToDto(task);
+        return taskDto.getAttachments();
     }
 }

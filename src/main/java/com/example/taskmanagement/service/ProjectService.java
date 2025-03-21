@@ -73,8 +73,8 @@ public class ProjectService extends BaseEntityService<Project, ProjectRepository
             throw new IllegalArgumentException("User is already a team member in this project.");
         }
         project.getTeamMembers().add(user);
-        ProjectDto projectDto =  ProjectMapper.MAPPER.converToDto(project);
-        projectDto.setTeamMembers(project.getTeamMembers());
+        /*ProjectDto projectDto =  ProjectMapper.MAPPER.converToDto(project);
+        projectDto.setTeamMembers(project.getTeamMembers());*/
         return ProjectMapper.MAPPER.converToDto(super.save(project));
     }
 

@@ -57,7 +57,7 @@ public class ProjectController {
     }
 
     @GetMapping("/status/{status}")
-    public ResponseEntity<RestResponse<List<ProjectDto>>> getProjectsByStatus(@PathVariable ProjectStatus projectStatus) {
+    public ResponseEntity<RestResponse<List<ProjectDto>>> getProjectsByStatus(@RequestParam ProjectStatus projectStatus) {
         return ResponseEntity.ok(RestResponse.of(projectService.getProjectsByStatus(projectStatus)));
     }
     @GetMapping("/members/{projectId}")

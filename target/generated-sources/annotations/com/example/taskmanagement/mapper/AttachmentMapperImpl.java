@@ -8,7 +8,7 @@ import javax.annotation.processing.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-03-21T00:47:38+0300",
+    date = "2025-03-21T20:35:50+0300",
     comments = "version: 1.6.3, compiler: javac, environment: Java 21.0.6 (Oracle Corporation)"
 )
 public class AttachmentMapperImpl implements AttachmentMapper {
@@ -24,7 +24,6 @@ public class AttachmentMapperImpl implements AttachmentMapper {
         attachment.setId( dto.getId() );
         attachment.setFilePath( dto.getFilePath() );
         attachment.setFileName( dto.getFileName() );
-        attachment.setTask( dto.getTask() );
 
         return attachment;
     }
@@ -40,7 +39,6 @@ public class AttachmentMapperImpl implements AttachmentMapper {
         attachmentDto.id( entity.getId() );
         attachmentDto.filePath( entity.getFilePath() );
         attachmentDto.fileName( entity.getFileName() );
-        attachmentDto.task( entity.getTask() );
 
         return attachmentDto.build();
     }

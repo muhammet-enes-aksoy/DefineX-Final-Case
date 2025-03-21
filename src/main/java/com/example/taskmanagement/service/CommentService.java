@@ -4,6 +4,7 @@ import com.example.taskmanagement.base.service.BaseEntityService;
 import com.example.taskmanagement.dto.comment.CommentCreateDto;
 import com.example.taskmanagement.dto.comment.CommentDto;
 import com.example.taskmanagement.dto.comment.CommentUpdateDto;
+import com.example.taskmanagement.dto.task.TaskDto;
 import com.example.taskmanagement.entity.Comment;
 import com.example.taskmanagement.entity.Task;
 import com.example.taskmanagement.entity.User;
@@ -11,6 +12,7 @@ import com.example.taskmanagement.exception.CommentNotFoundException;
 import com.example.taskmanagement.exception.TaskNotFoundException;
 import com.example.taskmanagement.exception.UserNotFoundException;
 import com.example.taskmanagement.mapper.CommentMapper;
+import com.example.taskmanagement.mapper.TaskMapper;
 import com.example.taskmanagement.repository.CommentRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,6 +41,9 @@ public class CommentService  extends BaseEntityService<Comment, CommentRepositor
         comment.setAuthor(user);
         comment.setTask(task);
 
+        task.getComments().add(comment);
+        /*TaskDto taskDto = TaskMapper.MAPPER.converToDto(task);
+        taskDto.setComments(task.getComments());*/
         return CommentMapper.MAPPER.converToDto(super.save(comment));
     }
 

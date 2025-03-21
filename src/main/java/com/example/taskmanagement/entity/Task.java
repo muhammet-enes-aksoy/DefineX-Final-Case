@@ -38,7 +38,7 @@ public class Task extends BaseEntity {
     private TaskState state;
 
     @Column(name = "REASON")
-    private String reason; // Blocked veya Cancelled olduğunda neden girilecek.
+    private String reason;
 
     @ManyToOne
     private Project project;
@@ -46,9 +46,17 @@ public class Task extends BaseEntity {
     @ManyToOne
     private User assignee;
 
-    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "TASKS_COMMENTS",
+            joinColumns = @JoinColumn(name = "task_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "comment_id", referencedColumnName = "id"))
     private List<Comment> comments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "TASKS_ATTACHMENTS",
+            joinColumns = @JoinColumn(name = "TASK_ID", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "ATTACHMENT_ID", referencedColumnName = "id"))
     private List<Attachment> attachments = new ArrayList<>();
 }

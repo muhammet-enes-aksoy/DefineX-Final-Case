@@ -29,7 +29,7 @@ public class UserController {
     public ResponseEntity<RestResponse<UserDto>> getUserById(@PathVariable Long id) throws UserNotFoundException {
         return ResponseEntity.ok(RestResponse.of(userService.getUserById(id)));
     }
-
+    @PreAuthorize("hasRole('TEAM_MEMBERS')")
     @PutMapping("/{id}")
     public ResponseEntity<RestResponse<UserDto>> updateUser(@PathVariable Long id, @RequestBody UserDto userDto) throws UserNotFoundException {
         return ResponseEntity.ok(RestResponse.of(userService.updateUser(userDto, id)));

@@ -8,7 +8,7 @@ import javax.annotation.processing.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-03-21T00:47:38+0300",
+    date = "2025-03-21T20:35:50+0300",
     comments = "version: 1.6.3, compiler: javac, environment: Java 21.0.6 (Oracle Corporation)"
 )
 public class CommentMapperImpl implements CommentMapper {
@@ -23,8 +23,6 @@ public class CommentMapperImpl implements CommentMapper {
 
         comment.setId( dto.getId() );
         comment.setText( dto.getText() );
-        comment.setAuthor( dto.getAuthor() );
-        comment.setTask( dto.getTask() );
 
         return comment;
     }
@@ -39,8 +37,6 @@ public class CommentMapperImpl implements CommentMapper {
 
         commentDto.id( entity.getId() );
         commentDto.text( entity.getText() );
-        commentDto.author( entity.getAuthor() );
-        commentDto.task( entity.getTask() );
 
         return commentDto.build();
     }

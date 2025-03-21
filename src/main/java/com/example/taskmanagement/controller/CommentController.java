@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 public class CommentController {
     private final CommentService commentService;
     
-    @PostMapping
+    @PostMapping("/{taskId}/{userId}")
     public ResponseEntity<RestResponse<CommentDto>> createComment(@PathVariable Long taskId,
                                                                   @PathVariable Long userId,
                                                                   @RequestBody CommentCreateDto commentCreateDto) {

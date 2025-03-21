@@ -41,9 +41,16 @@ public class User extends BaseEntity implements UserDetails {
     @Column(name = "ROLE", length = 20)
     private UserRoles role;
 
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "USERS_TASKS",
+            joinColumns = @JoinColumn(name = "USER_ID", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "TASK_ID", referencedColumnName = "id"))
+    private List<Task> tasks = new ArrayList<>();
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
+        return List.of(new SimpleGrantedAuthority("ROLE_" + this.role.name()));
     }
 
     @Override
