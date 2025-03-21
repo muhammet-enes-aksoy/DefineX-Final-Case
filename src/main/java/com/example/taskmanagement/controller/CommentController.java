@@ -22,12 +22,12 @@ public class CommentController {
         return ResponseEntity.ok(RestResponse.of(commentService.createComment(taskId, userId, commentCreateDto)));
     }
 
-    @PutMapping("/{CommentId}")
+    @PutMapping("/{commentId}")
     public ResponseEntity<RestResponse<CommentDto>> updateComment(@PathVariable Long CommentId,
                                                                   @RequestBody CommentUpdateDto commentUpdateDto) {
         return ResponseEntity.ok(RestResponse.of(commentService.updateComment(CommentId, commentUpdateDto)));
     }
-    @DeleteMapping("/{CommentId}")
+    @DeleteMapping("/{commentId}")
     public ResponseEntity<RestResponse<String>> deleteComment(@PathVariable Long CommentId) {
         commentService.deleteComment(CommentId);
         return ResponseEntity.ok(RestResponse.of("Comment deleted!"));
