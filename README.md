@@ -29,6 +29,119 @@ The **Advanced Task Management Application** is a modern, in-house solution deve
 - **Lombok**
 - **Swagger (for API documentation)**
 
+## 📄 Endpoints
+
+### User Management
+![user-controller](https://github.com/user-attachments/assets/6a963cd5-faf0-4155-9e01-383fcd463206)
+
+- **GET** `/api/v1/users`  
+  Get all users.
+
+- **GET** `/api/v1/users/{id}`  
+  Get user by ID.
+
+- **PUT** `/api/v1/users/{id}`  
+  Update user.
+
+- **DELETE** `/api/v1/users/{id}`  
+  Delete user.
+
+- **GET** `/api/v1/users/role/{role}`  
+  Get users by role.
+
+- **PUT** `/api/v1/users/update-role/{userId}`  
+  Update user role.
+
+---
+
+### Task Management
+- **GET** `/api/v1/tasks`  
+  Get all tasks.
+
+- **GET** `/api/v1/tasks/{taskId}`  
+  Get task by ID.
+
+- **POST** `/api/v1/tasks/{projectId}`  
+  Create a new task.
+
+- **PUT** `/api/v1/tasks/{id}`  
+  Update task.
+
+- **DELETE** `/api/v1/tasks/{taskId}`  
+  Delete task.
+
+- **POST** `/api/v1/tasks/{taskId}/assign/{userId}`  
+  Assign task to user.
+
+- **PUT** `/api/v1/tasks/taskState/{taskId}`  
+  Update task state.
+
+- **GET** `/api/v1/tasks/{taskId}/comments`  
+  Get comments by task ID.
+
+- **GET** `/api/v1/tasks/{taskId}/attachments`  
+  Get attachments by task ID.
+
+---
+
+### Project Management
+- **GET** `/api/v1/projects`  
+  Get all projects.
+
+- **GET** `/api/v1/projects/{projectId}`  
+  Get project by ID.
+
+- **POST** `/api/v1/projects`  
+  Create a new project.
+
+- **PUT** `/api/v1/projects/{projectId}`  
+  Update project.
+
+- **DELETE** `/api/v1/projects/{projectId}`  
+  Delete project.
+
+- **POST** `/api/v1/projects/{projectId}/members/{userId}`  
+  Add team member to project.
+
+- **GET** `/api/v1/projects/status/{status}`  
+  Get projects by status.
+
+- **GET** `/api/v1/projects/members/{projectId}`  
+  Get project members.
+
+---
+
+### Comment Management
+- **POST** `/api/v1/comments/task/{taskId}/user/{userId}`  
+  Create a comment.
+
+- **PUT** `/api/v1/comments/{commentId}`  
+  Update comment.
+
+- **DELETE** `/api/v1/comments/{commentId}`  
+  Delete comment.
+
+---
+
+### Attachment Management
+- **POST** `/api/v1/attachments/task/{taskId}`  
+  Upload attachment.
+
+- **PUT** `/api/v1/attachments/{attachmentId}`  
+  Update attachment.
+
+- **DELETE** `/api/v1/attachments/{attachmentId}`  
+  Delete attachment.
+
+---
+
+### Authentication
+- **POST** `/api/v1/auth/register`  
+  Register a new user.
+
+- **POST** `/api/v1/auth/authenticate`  
+  Authenticate user.
+
 ### Installation
 
 1. **Clone the repository**:
