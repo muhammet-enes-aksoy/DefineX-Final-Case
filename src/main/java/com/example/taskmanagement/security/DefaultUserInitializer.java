@@ -1,12 +1,8 @@
 package com.example.taskmanagement.security;
 
-import com.example.taskmanagement.base.entity.BaseAdditionalFields;
 import com.example.taskmanagement.entity.User;
 import com.example.taskmanagement.enums.UserRoles;
-import com.example.taskmanagement.mapper.UserMapper;
-import com.example.taskmanagement.repository.UserRepository;
 import com.example.taskmanagement.service.UserService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
