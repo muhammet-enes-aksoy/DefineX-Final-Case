@@ -28,7 +28,6 @@ public class CommentService  extends BaseEntityService<Comment, CommentRepositor
         this.taskService = taskService;
         this.userService = userService;
     }
-
     @Transactional
     public CommentDto createComment(Long taskId, Long userId, CommentCreateDto commentCreateDto) {
         Task task = taskService.findById(taskId)
@@ -42,25 +41,19 @@ public class CommentService  extends BaseEntityService<Comment, CommentRepositor
         comment.setTask(task);
 
         task.getComments().add(comment);
-        /*TaskDto taskDto = TaskMapper.MAPPER.converToDto(task);
-        taskDto.setComments(task.getComments());*/
         return CommentMapper.MAPPER.converToDto(super.save(comment));
     }
-
     @Transactional
     public CommentDto updateComment(Long commentId, CommentUpdateDto commentUpdateDto) {
         Comment comment = super.findById(commentId)
                 .orElseThrow(() -> new CommentNotFoundException("Comment not found"));
-
         comment.setText(commentUpdateDto.getNewText());
         return CommentMapper.MAPPER.converToDto(super.save(comment));
     }
-
     @Transactional
     public void deleteComment(Long commentId) {
         Comment comment = super.findById(commentId)
                 .orElseThrow(() -> new CommentNotFoundException("Comment not found"));
-
         super.delete(comment);
     }
 }

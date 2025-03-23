@@ -57,7 +57,6 @@ public class TaskService extends BaseEntityService<Task, TaskRepository> {
                 .collect(Collectors.toList());
         return TaskMapper.MAPPER.converToDtoList(tasks);
     }
-
     @Transactional
     public TaskDto createTask(Long projectId, TaskCreateDto taskCreateDto) {
         Project project = projectService.findById(projectId).orElseThrow(() -> new ProjectNotFoundException("Project not found!"));
@@ -70,12 +69,9 @@ public class TaskService extends BaseEntityService<Task, TaskRepository> {
         task.setProject(project);
         super.save(task);
         project.getTasks().add(task);
-        /*ProjectDto projectDto =  ProjectMapper.MAPPER.converToDto(project);
-        projectDto.setTasks(project.getTasks());*/
         projectService.save(project);
         return TaskMapper.MAPPER.converToDto(task);
     }
-
     @Transactional
     public TaskDto updateTask(Long id, TaskDto taskDto) throws TaskNotFoundException {
         Task task = super.findByIdWithControl(id);
@@ -87,13 +83,11 @@ public class TaskService extends BaseEntityService<Task, TaskRepository> {
 
         return TaskMapper.MAPPER.converToDto(super.save(task));
     }
-
     @Transactional
     public void deleteTask(Long id) throws TaskNotFoundException {
         Task task = super.findByIdWithControl(id);
         super.delete(task);
     }
-
     @Transactional
     public TaskDto updateTaskStates(Long id, TaskState taskState) throws TaskNotFoundException {
         Task task = super.findByIdWithControl(id);
@@ -102,7 +96,6 @@ public class TaskService extends BaseEntityService<Task, TaskRepository> {
 
         return TaskMapper.MAPPER.converToDto(super.save(task));
     }
-
     private void updateTaskState(Task task, TaskState newState, String reason) {
         if (task.getState() == TaskState.COMPLETED) {
             throw new InvalidTaskStateException("Completed tasks cannot change state.");
@@ -122,26 +115,20 @@ public class TaskService extends BaseEntityService<Task, TaskRepository> {
     public TaskDto assignTaskToUser(Long taskId, Long userId) throws TaskNotFoundException, UserNotFoundException {
         Task task = super.findById(taskId).orElseThrow(() -> new TaskNotFoundException("Task not found"));
         User user = userService.findById(userId).orElseThrow(() -> new UserNotFoundException("User not found"));
-
         if (user.getRole() != UserRoles.TEAM_MEMBER) {
             throw new IllegalArgumentException("Only TEAM_MEMBER role can be assigned to a task");
         }
-
         task.setAssignee(user);
         super.save(task);
         user.getTasks().add(task);
-        /*UserDto userDto = UserMapper.MAPPER.converToDto(user);
-        userDto.setTasks(user.getTasks());*/
         userService.save(user);
         return TaskMapper.MAPPER.converToDto(task);
     }
-
     public List<CommentDto> getCommentsByTaskId(Long taskId) throws TaskNotFoundException {
         Task task = super.findById(taskId).orElseThrow(() -> new TaskNotFoundException("Task not found"));
         TaskDto taskDto = TaskMapper.MAPPER.converToDto(task);
         return taskDto.getComments();
     }
-
     public List<AttachmentDto> getAttachmentsByTaskId(Long taskId) throws TaskNotFoundException {
         Task task = super.findById(taskId).orElseThrow(() -> new TaskNotFoundException("Task not found"));
         TaskDto taskDto = TaskMapper.MAPPER.converToDto(task);

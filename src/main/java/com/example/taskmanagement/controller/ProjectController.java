@@ -27,23 +27,27 @@ public class ProjectController {
     }
 
     @GetMapping("/{projectId}")
+    @PreAuthorize("hasRole('TEAM_LEADER') or hasRole('PROJECT_MANAGER')")
     public  ResponseEntity<RestResponse<ProjectDto>> getProjectById(@PathVariable Long projectId) {
         ProjectDto project = projectService.getProjectById(projectId);
         return ResponseEntity.ok(RestResponse.of(project));
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('PROJECT_MANAGER')")
     public ResponseEntity<RestResponse<ProjectDto>> createProject(@RequestBody ProjectCreateDto projectCreateDto) {
         return ResponseEntity.ok(RestResponse.of(projectService.createProject(projectCreateDto)));
     }
 
     @PutMapping("/{projectId}")
+    @PreAuthorize("hasRole('PROJECT_MANAGER')")
     public ResponseEntity<RestResponse<ProjectDto>> updateProject(@PathVariable Long projectId,
             @RequestBody ProjectCreateDto projectCreateDto) {
         return ResponseEntity.ok(RestResponse.of(projectService.updateProject(projectId, projectCreateDto)));
     }
 
     @PostMapping("/{projectId}/members/{userId}")
+    @PreAuthorize("hasRole('TEAM_LEADER') or hasRole('PROJECT_MANAGER')")
     public ResponseEntity<RestResponse<ProjectDto>> addTeamMember(
             @PathVariable Long projectId,
             @PathVariable Long userId) {
@@ -51,6 +55,7 @@ public class ProjectController {
     }
 
     @DeleteMapping("/{projectId}")
+    @PreAuthorize("hasRole('PROJECT_MANAGER')")
     public ResponseEntity<RestResponse<String>> deleteProject(@PathVariable Long projectId) {
         projectService.deleteProject(projectId);
         return ResponseEntity.ok(RestResponse.of("Project deleted!"));

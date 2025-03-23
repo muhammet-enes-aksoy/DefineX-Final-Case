@@ -35,7 +35,6 @@ public class ProjectService extends BaseEntityService<Project, ProjectRepository
     public ProjectDto getProjectById(Long projectId) {
         return ProjectMapper.MAPPER.converToDto(super.findByIdWithControl(projectId));
     }
-
     @Transactional
     public ProjectDto createProject(ProjectCreateDto projectCreateDto) {
         Project project = new Project();
@@ -45,7 +44,6 @@ public class ProjectService extends BaseEntityService<Project, ProjectRepository
         project.setStatus(projectCreateDto.getStatus());
         return ProjectMapper.MAPPER.converToDto(super.save(project));
     }
-
     @Transactional
     public ProjectDto updateProject(Long projectId, ProjectCreateDto projectCreateDto) {
         Project existingProject = super.findById(projectId)
@@ -58,8 +56,6 @@ public class ProjectService extends BaseEntityService<Project, ProjectRepository
 
         return ProjectMapper.MAPPER.converToDto(super.save(existingProject));
     }
-
-    // Proje üzerinde takım üyesi ekleme
     public ProjectDto addTeamMember(Long projectId, Long userId) {
         Project project = super.findById(projectId)
                 .orElseThrow(() -> new ProjectNotFoundException("Project not found!"));
@@ -73,18 +69,14 @@ public class ProjectService extends BaseEntityService<Project, ProjectRepository
             throw new IllegalArgumentException("User is already a team member in this project.");
         }
         project.getTeamMembers().add(user);
-        /*ProjectDto projectDto =  ProjectMapper.MAPPER.converToDto(project);
-        projectDto.setTeamMembers(project.getTeamMembers());*/
         return ProjectMapper.MAPPER.converToDto(super.save(project));
     }
-
     @Transactional
     public void deleteProject(Long projectId) {
         Project project = super.findById(projectId)
                 .orElseThrow(() -> new ProjectNotFoundException("Project not found!"));
         super.delete(project);
     }
-
     public List<ProjectDto> getProjectsByStatus(ProjectStatus projectStatus) {
         List<Project> projects = super.findAll()
                 .stream()
@@ -92,7 +84,6 @@ public class ProjectService extends BaseEntityService<Project, ProjectRepository
                 .collect(Collectors.toList());
         return ProjectMapper.MAPPER.converToDtoList(projects);
     }
-
     public List<UserDto> getProjectUsers(Long projectId) {
         Project project = super.findById(projectId)
                 .orElseThrow(() -> new ProjectNotFoundException("Project not found!"));

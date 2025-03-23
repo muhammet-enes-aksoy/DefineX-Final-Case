@@ -174,33 +174,6 @@ class ProjectControllerTest {
     }
 
     @Test
-    @DisplayName("Get projects by status - success")
-    void testGetProjectsByStatus() throws Exception {
-        ProjectDto project1 = ProjectDto.builder()
-                .id(1L)
-                .title("Project 1")
-                .description("Description 1")
-                .department("IT")
-                .status(ProjectStatus.HIGH)
-                .build();
-
-        ProjectDto project2 = ProjectDto.builder()
-                .id(2L)
-                .title("Project 2")
-                .description("Description 2")
-                .department("HR")
-                .status(ProjectStatus.HIGH)
-                .build();
-
-        when(projectService.getProjectsByStatus(ProjectStatus.HIGH)).thenReturn(Arrays.asList(project1, project2));
-
-        mockMvc.perform(get("/api/v1/projects/status/HIGH"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data[0].status").value("HIGH"))
-                .andExpect(jsonPath("$.data[1].status").value("HIGH"));
-    }
-
-    @Test
     @DisplayName("Get project users - success")
     void testGetProjectUsers() throws Exception {
         UserDto user1 = UserDto.builder()

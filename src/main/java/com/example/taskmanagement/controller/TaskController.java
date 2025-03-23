@@ -15,6 +15,7 @@ import com.example.taskmanagement.mapper.TaskMapper;
 import com.example.taskmanagement.service.TaskService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,60 +27,84 @@ public class TaskController {
     private final TaskService taskService;
 
     @GetMapping
+    @PreAuthorize("hasRole('TEAM_MEMBERS') or hasRole('TEAM_LEADER') or hasRole('PROJECT_MANAGER')")
     public ResponseEntity<RestResponse<List<TaskResponse>>> getAllTasks() {
         return ResponseEntity.ok(RestResponse.of(TaskMapper.MAPPER.convertToResponseList(taskService.getAllTasks())));
     }
 
     @GetMapping("/{taskId}")
-    public ResponseEntity<RestResponse<TaskResponse>> getTaskById(@PathVariable Long taskId) {
+    @PreAuthorize("hasRole('TEAM_MEMBERS') or hasRole('TEAM_LEADER') or hasRole('PROJECT_MANAGER')")
+    public ResponseEntity<RestResponse<TaskResponse>> getTaskById(
+            @PathVariable Long taskId) {
         return ResponseEntity.ok(RestResponse.of(TaskMapper.MAPPER.convertToResponse(taskService.getTaskById(taskId))));
     }
 
     @GetMapping("state/{state}")
-    public ResponseEntity<RestResponse<List<TaskDto>>> getTaskByState(@RequestParam TaskState taskState) {
+    @PreAuthorize("hasRole('TEAM_MEMBERS') or hasRole('TEAM_LEADER') or hasRole('PROJECT_MANAGER')")    public ResponseEntity<RestResponse<List<TaskDto>>> getTaskByState(
+            @RequestParam TaskState taskState) {
         return ResponseEntity.ok(RestResponse.of(taskService.getTaskByState(taskState)));
     }
     @GetMapping("priority/{priority}")
-    public ResponseEntity<RestResponse<List<TaskDto>>> getTaskByPriority(@RequestParam TaskPriority taskPriority) {
+    @PreAuthorize("hasRole('TEAM_MEMBERS') or hasRole('TEAM_LEADER') or hasRole('PROJECT_MANAGER')")
+    public ResponseEntity<RestResponse<List<TaskDto>>> getTaskByPriority(
+            @RequestParam TaskPriority taskPriority) {
         return ResponseEntity.ok(RestResponse.of(taskService.getTaskByPriority(taskPriority)));
     }
 
     @PostMapping("/{projectId}")
-    public ResponseEntity<RestResponse<TaskResponse>> createTask(@PathVariable Long projectId, @RequestBody TaskCreateDto taskCreateDto) {
+    @PreAuthorize("hasRole('TEAM_LEADER') or hasRole('PROJECT_MANAGER')")
+    public ResponseEntity<RestResponse<TaskResponse>> createTask(
+            @PathVariable Long projectId,
+            @RequestBody TaskCreateDto taskCreateDto) {
         TaskResponse taskResponse = TaskMapper.MAPPER.convertToResponse(taskService.createTask(projectId, taskCreateDto));
         taskResponse.setProjectId(projectId);
         return ResponseEntity.ok(RestResponse.of(taskResponse));
     }
 
     @DeleteMapping("/{taskId}")
-    public ResponseEntity<RestResponse<String>> deleteTask(@PathVariable Long taskId) {
+    @PreAuthorize("hasRole('TEAM_LEADER') or hasRole('PROJECT_MANAGER')")
+    public ResponseEntity<RestResponse<String>> deleteTask(
+            @PathVariable Long taskId) {
         taskService.deleteTask(taskId);
         return ResponseEntity.ok(RestResponse.of("Task deleted!"));
     }
 
     @PostMapping("/{taskId}/assign/{userId}")
-    public ResponseEntity<RestResponse<TaskResponse>> assignTaskToUser(@PathVariable Long taskId, @PathVariable Long userId) {
+    @PreAuthorize("hasRole('TEAM_LEADER') or hasRole('PROJECT_MANAGER')")
+    public ResponseEntity<RestResponse<TaskResponse>> assignTaskToUser(
+            @PathVariable Long taskId,
+            @PathVariable Long userId) {
         TaskResponse taskResponse = TaskMapper.MAPPER.convertToResponse(taskService.assignTaskToUser(taskId, userId));
         taskResponse.setUserId(userId);
         return ResponseEntity.ok(RestResponse.of(taskResponse));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TaskResponse> updateTask(@PathVariable Long id, @RequestBody TaskDto taskDto) {
+    @PreAuthorize("hasRole('TEAM_LEADER') or hasRole('PROJECT_MANAGER')")
+    public ResponseEntity<TaskResponse> updateTask(
+            @PathVariable Long id,
+            @RequestBody TaskDto taskDto) {
         return ResponseEntity.ok(TaskMapper.MAPPER.convertToResponse(taskService.updateTask(id, taskDto)));
     }
     @PutMapping("/taskState/{taskId}")
-    public ResponseEntity<TaskResponse> updateTaskState(@PathVariable Long taskId, @RequestParam TaskState taskState) {
+    @PreAuthorize("hasRole('TEAM_LEADER') or hasRole('PROJECT_MANAGER')")
+    public ResponseEntity<TaskResponse> updateTaskState(
+            @PathVariable Long taskId,
+            @RequestParam TaskState taskState) {
         return ResponseEntity.ok(TaskMapper.MAPPER.convertToResponse(taskService.updateTaskStates(taskId, taskState)));
     }
 
     @GetMapping("/{taskId}/comments")
-    public ResponseEntity<RestResponse<List<CommentDto>>> getCommentsByTaskId(@PathVariable Long taskId) {
+    @PreAuthorize("hasRole('TEAM_MEMBERS') or hasRole('TEAM_LEADER') or hasRole('PROJECT_MANAGER')")
+    public ResponseEntity<RestResponse<List<CommentDto>>> getCommentsByTaskId(
+            @PathVariable Long taskId) {
         return ResponseEntity.ok(RestResponse.of(taskService.getCommentsByTaskId(taskId)));
     }
 
     @GetMapping("/{taskId}/attachments")
-    public ResponseEntity<RestResponse<List<AttachmentDto>>> getAttachmentsByTaskId(@PathVariable Long taskId) {
+    @PreAuthorize("hasRole('TEAM_MEMBERS') or hasRole('TEAM_LEADER') or hasRole('PROJECT_MANAGER')")
+    public ResponseEntity<RestResponse<List<AttachmentDto>>> getAttachmentsByTaskId(
+            @PathVariable Long taskId) {
         return ResponseEntity.ok(RestResponse.of(taskService.getAttachmentsByTaskId(taskId)));
     }
 }

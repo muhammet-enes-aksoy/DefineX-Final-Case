@@ -33,63 +33,35 @@ public class AttachmentService extends BaseEntityService<Attachment, AttachmentR
         this.taskService = taskService;
     }
 
-    // Dosya yükleme işlemi
     @Transactional
     public AttachmentDto uploadAttachment(Long taskId, MultipartFile file) throws IOException {
         Task task = taskService.findById(taskId)
                 .orElseThrow(() -> new TaskNotFoundException("Task not found"));
 
-        // Dosya ismini benzersiz hale getirme
         String savedFileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
 
-        // Dosya dizinini kontrol et ve oluştur
         File directory = new File(attachmentDirectory);
         if (!directory.exists()) {
-            directory.mkdirs();  // Dizin yoksa oluştur
+            directory.mkdirs();
         }
-
-        // Dosyayı hedef dizine kaydet
         File destination = new File(directory, savedFileName);
         file.transferTo(destination);
 
-        // Attachment nesnesi oluştur ve ilişkilendir
         Attachment attachment = new Attachment();
         attachment.setFileName(file.getOriginalFilename());
         attachment.setFilePath(destination.getAbsolutePath());
         attachment.setTask(task);
         task.getAttachments().add(attachment);
 
-        // Task DTO'yu güncelle
-
-
-        // Attachment veritabanına kaydet
         return AttachmentMapper.MAPPER.converToDto(super.save(attachment));
     }
 
-    // Dosya güncelleme işlemi
     @Transactional
-    public AttachmentDto updateAttachment(Long id, MultipartFile file, AttachmentUpdateDto attachmentUpdateDto) throws IOException {
-        // Attachment'ı bul
+    public AttachmentDto updateAttachment(Long id, AttachmentUpdateDto attachmentUpdateDto) throws IOException {
+
         Attachment attachment = super.findById(id)
                 .orElseThrow(() -> new AttachmentNotFoundException("Attachment not found"));
-
-        // Dosya ismini güncelle
         attachment.setFileName(attachmentUpdateDto.getNewFileName());
-
-        // Dosya dizinini kontrol et ve oluştur
-        File directory = new File(attachmentDirectory);
-        if (!directory.exists()) {
-            directory.mkdirs();
-        }
-
-        // Dosyayı güncelle
-        File destination = new File(directory, attachment.getFileName());
-        file.transferTo(destination);
-
-        // Yeni dosya yolunu güncelle
-        attachment.setFilePath(destination.getAbsolutePath());
-
-        // Attachment'ı veritabanına kaydet
         return AttachmentMapper.MAPPER.converToDto(super.save(attachment));
     }
 
@@ -104,7 +76,6 @@ public class AttachmentService extends BaseEntityService<Attachment, AttachmentR
             if (!deleted) {
                 throw new RuntimeException("Failed to delete the file.");
             }
-
             super.delete(attachment);
         }
     }

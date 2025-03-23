@@ -108,24 +108,6 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.data").value("User deleted!"));
     }
 
-    @Test
-    @DisplayName("Get users by role - success")
-    void testGetUsersByRole() throws Exception {
-        UserDto userDto = UserDto.builder()
-                .id(1L)
-                .username("enes_aksoy")
-                .email("enes@definex.com")
-                .password("123")
-                .role(UserRoles.TEAM_LEADER)
-                .build();
-
-        when(userService.getUsersByRole(UserRoles.TEAM_LEADER))
-                .thenReturn(Collections.singletonList(userDto));
-
-        mockMvc.perform(get("/api/v1/users/role/TEAM_LEADER"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data[0].role").value("TEAM_LEADER"));
-    }
 
     @Test
     @DisplayName("Update user role - success")

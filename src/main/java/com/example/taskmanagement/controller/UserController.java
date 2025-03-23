@@ -27,32 +27,39 @@ public class UserController {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('TEAM_LEADER') or hasRole('PROJECT_MANAGER')")
-    public ResponseEntity<RestResponse<UserDto>> getUserById(@PathVariable Long id) throws UserNotFoundException {
+    public ResponseEntity<RestResponse<UserDto>> getUserById(
+            @PathVariable Long id) throws UserNotFoundException {
         return ResponseEntity.ok(RestResponse.of(userService.getUserById(id)));
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('TEAM_MEMBERS') or hasRole('TEAM_LEADER') or hasRole('PROJECT_MANAGER')")
-    public ResponseEntity<RestResponse<UserDto>> updateUser(@PathVariable Long id, @RequestBody UserDto userDto) throws UserNotFoundException {
+    public ResponseEntity<RestResponse<UserDto>> updateUser(
+            @PathVariable Long id,
+            @RequestBody UserDto userDto) throws UserNotFoundException {
         return ResponseEntity.ok(RestResponse.of(userService.updateUser(userDto, id)));
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('TEAM_LEADER') or hasRole('PROJECT_MANAGER')")
-    public ResponseEntity<RestResponse<String>> deleteUser(@PathVariable Long id) throws UserNotFoundException {
+    public ResponseEntity<RestResponse<String>> deleteUser(
+            @PathVariable Long id) throws UserNotFoundException {
         userService.deleteUser(id);
         return ResponseEntity.ok(RestResponse.of("User deleted!"));
     }
 
     @GetMapping("/role/{role}")
     @PreAuthorize("hasRole('TEAM_LEADER') or hasRole('PROJECT_MANAGER')")
-    public ResponseEntity<RestResponse<List<UserDto>>> getUsersByRole(@RequestParam UserRoles role) {
+    public ResponseEntity<RestResponse<List<UserDto>>> getUsersByRole(
+            @RequestParam UserRoles role) {
         return ResponseEntity.ok(RestResponse.of(userService.getUsersByRole(role)));
     }
 
     @PutMapping("/update-role/{userId}")
     @PreAuthorize("hasRole('PROJECT_MANAGER')")
-    public ResponseEntity<RestResponse<UserDto>> updateUserRole(@PathVariable Long userId, @RequestParam UserRoles newRole) {
+    public ResponseEntity<RestResponse<UserDto>> updateUserRole(
+            @PathVariable Long userId,
+            @RequestParam UserRoles newRole) {
         return ResponseEntity.ok(RestResponse.of(userService.updateUserRole(userId, newRole)));
     }
 }
