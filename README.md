@@ -28,6 +28,11 @@ The **Advanced Task Management Application** is a modern, in-house solution deve
 - **Lombok**
 - **Swagger (for API documentation)**
 
+## API Documentation
+**Swagger UI: http://localhost:8080/swagger-ui.html**
+
+**OpenAPI Docs: http://localhost:8080/v3/api-docs**
+
 ## 📄 Endpoints
 
 ### User Management
