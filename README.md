@@ -55,6 +55,8 @@ The **Advanced Task Management Application** is a modern, in-house solution deve
 ---
 
 ### Task Management
+![task controller](https://github.com/user-attachments/assets/5759257b-e9ad-4cf8-8a53-247580e93e67)
+
 - **GET** `/api/v1/tasks`  
   Get all tasks.
 
@@ -85,6 +87,8 @@ The **Advanced Task Management Application** is a modern, in-house solution deve
 ---
 
 ### Project Management
+![project controller](https://github.com/user-attachments/assets/dbaaef17-8937-4829-b7c9-0c6b21e5963a)
+
 - **GET** `/api/v1/projects`  
   Get all projects.
 
@@ -112,6 +116,8 @@ The **Advanced Task Management Application** is a modern, in-house solution deve
 ---
 
 ### Comment Management
+![comments controller](https://github.com/user-attachments/assets/8875ed01-8d0c-4dd9-8988-4255599c7882)
+
 - **POST** `/api/v1/comments/task/{taskId}/user/{userId}`  
   Create a comment.
 
@@ -124,6 +130,8 @@ The **Advanced Task Management Application** is a modern, in-house solution deve
 ---
 
 ### Attachment Management
+![attachments controler](https://github.com/user-attachments/assets/db709bbf-c8cd-48fa-864a-b2b39a55b341)
+
 - **POST** `/api/v1/attachments/task/{taskId}`  
   Upload attachment.
 
@@ -136,6 +144,8 @@ The **Advanced Task Management Application** is a modern, in-house solution deve
 ---
 
 ### Authentication
+![authentication sontroller](https://github.com/user-attachments/assets/7afcd440-fa4e-4e1e-b311-875bd61d78bd)
+
 - **POST** `/api/v1/auth/register`  
   Register a new user.
 
