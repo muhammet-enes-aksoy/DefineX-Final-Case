@@ -21,6 +21,7 @@ The **Advanced Task Management Application** is a modern, in-house solution deve
 
 - **Java 21**
 - **Spring Boot 3**
+- **PostgreSQL**
 - **Spring Security**
 - **Spring Data JPA**
 - **Hibernate**
@@ -32,6 +33,12 @@ The **Advanced Task Management Application** is a modern, in-house solution deve
 **Swagger UI: http://localhost:8080/swagger-ui.html**
 
 **OpenAPI Docs: http://localhost:8080/v3/api-docs**
+
+### Installation
+
+ **Clone the repository**:
+   ```bash
+   git clone [https://github.com/muhammet-enes-aksoy/DefineX-Final-Case]
 
 ## 📄 Endpoints
 
